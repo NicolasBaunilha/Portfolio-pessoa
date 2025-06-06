@@ -23,40 +23,45 @@ pyautogui.press("enter")
 
 #Passo 3 - Impoortar a base de dados
 tabela = pd.read_csv("produtos.csv")
+time.sleep(0.5)
 
 #Passo 4 - Cadastrar 1 produto
-time.sleep(0.5)
-pyautogui.press("tab")
+for linha in tabela.index:
+    
+    codigo = tabela.loc[linha, "codigo"]
+    marca = tabela.loc[linha, "marca"]
+    tipo = tabela.loc[linha, "tipo"]
+    categoria = str(tabela.loc[linha, "categoria"])
+    preco_unitario = str(tabela.loc[linha, "preco_unitario"])
+    custo = str(tabela.loc[linha, "custo"])
+    obs = str(tabela.loc[linha, "obs"])
 
-codigo = "MOLO000251"
-marca = "Logitech"
-tipo = "Mouse"
-categoria = "1"
-preco_unitario = "25.95"
-custo = "50"
-obs = ""
+    pyautogui.click(x=469, y=288)
+    pyautogui.write(codigo)
+    pyautogui.press("tab")
 
-pyautogui.write(codigo)
-pyautogui.press("tab")
+    pyautogui.write(marca)
+    pyautogui.press("tab")
 
-pyautogui.write(marca)
-pyautogui.press("tab")
+    pyautogui.write(tipo)
+    pyautogui.press("tab")
 
-pyautogui.write(tipo)
-pyautogui.press("tab")
+    pyautogui.write(categoria)
+    pyautogui.press("tab")
 
-pyautogui.write(categoria)
-pyautogui.press("tab")
+    pyautogui.write(preco_unitario)
+    pyautogui.press("tab")
 
-pyautogui.write(preco_unitario)
-pyautogui.press("tab")
+    pyautogui.write(custo)
+    pyautogui.press("tab")
+    
+    if obs != "nan":
+        pyautogui.write(obs)
+    pyautogui.press("tab")
+    pyautogui.press("enter")
 
-pyautogui.write(custo)
-pyautogui.press("tab")
-
-pyautogui.write(obs)
-pyautogui.press("tab")
-pyautogui.press("enter")
+    pyautogui.scroll(100)
 
 print("controle")
 #Passo 5 - Repetir para os demais
+
