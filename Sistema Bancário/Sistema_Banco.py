@@ -9,16 +9,23 @@ def menu():
     [s]\tSacar
     [e]\tExtrato
     [q]\tSair
-     
+    [nu]\tCriar Usuário
+    [nc]\tCriar Conta
+    [lc]\tListar Contas
+    ------------------
     """
     return input(textwrap.dedent(menu))
 
 def main():
-    saldo = 0.0
+    SAQUES_DIARIOS = 3
     LIMITE_DO_SAQUE = 500
+    AGENCIA = "0001"
+
+    saldo = 0.0
     extrato = ""
     numero_de_saques = 0
-    SAQUES_DIARIOS = 3
+    usuarios = []
+    contas = []
 
     while True:
         opcao = menu()
@@ -46,6 +53,19 @@ def main():
 
         elif opcao == "e":
             exibir_extrato(saldo, extrato)
+
+        elif opcao == "nu":
+            criar_usuario(usuarios)
+
+        elif opcao == "nc":
+            numero_conta = len(contas) + 1
+            conta = criar_conta(AGENCIA, numero_conta, usuarios)
+
+            if conta:
+                contas.append(AGENCIA, numero_conta, usuarios)
+
+        elif opcao == "lc":
+            listar_contas(contas)
 
         elif opcao == "q":
             break
@@ -80,6 +100,46 @@ def depositar(saldo, valor, extrato, /):
                 
 def exibir_extrato(saldo, extrato):
     print(f"Saldo atual: {saldo:.2f} \n\n-----------------------\n{extrato}")
+
+def criar_usuario(usuarios):
+    cpf = input("Informe seu CPF (somente em números): ")
+    usuario = filtrar_usuarios(cpf, usuarios)
+
+    if usuario:
+        print("@@@ Já existe usuários com este CPF! @@@")
+        return
+
+    nome = input("Informe o nome completo: ")
+    data_de_nascimento = input("Informe a data de nascimento (dd-mm-aaaa): ")
+    endereco = input("Informe o endereço (logradouro, nro - bairro - cidade/sigle estado): ")
+
+    usuarios.append({"nome": nome, "data_de_nascimento": data_de_nascimento, "cpf": cpf, "endereco": endereco})
+
+    print("=== Usuário criado com sucesso! ===")
+
+def filtrar_usuarios(cpf, usuarios):
+    usuarios_filtrados = [usuario for usuario in usuarios if usuario["cpf"] == cpf]
+    return usuarios_filtrados[0] if usuarios_filtrados else None
+
+def criar_conta(agencia, numero_conta, usuarios):
+    cpf = input("Informe o CPF do usuario (smente em números): ")
+    usuario = filtrar_usuarios(cpf, usuarios)
+
+    if usuario:
+        print("\n=== Conta criada com sucesso! ===")
+        return {"agencia": agencia, "numero_conta": numero_conta, "usuario": usuario}
+    
+    print("\n@@@ Usuário não encontrada, fluxo de criação de conta interrmpido @@@")
+
+def listar_contas(contas):
+    for conta in contas:
+        linha = f"""\
+            Agência:\t{conta['agencia']}
+            C/C:\t\t{conta['numero_conta']}
+            Titular:\t{conta['usuario']['nome']}
+        """
+        print("=" * 100)
+        print(textwrap.dedent(linha))
 
 if __name__ == "__main__":
     main()
