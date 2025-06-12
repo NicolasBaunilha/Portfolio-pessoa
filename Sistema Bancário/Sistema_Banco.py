@@ -13,7 +13,7 @@ def menu():
     [nc]\tCriar Conta
     [lc]\tListar Contas
     ------------------
-    """
+    -> """
     return input(textwrap.dedent(menu))
 
 def main():
@@ -62,7 +62,7 @@ def main():
             conta = criar_conta(AGENCIA, numero_conta, usuarios)
 
             if conta:
-                contas.append(AGENCIA, numero_conta, usuarios)
+                contas.append(conta)
 
         elif opcao == "lc":
             listar_contas(contas)
